@@ -70,6 +70,7 @@ public class UaeCloudSim {
         Infrastructure infra = new Infrastructure(simulation, policy);
         List<Vm> vmTemplateList = infra.getVmList();
 
+        Autoscaling.resetScaledCount();
         if (autoscaling) {
             setupAutoscaling(infra, policy);
         }
@@ -80,16 +81,25 @@ public class UaeCloudSim {
         List<Cloudlet> cloudletList = Workload.createCloudlets(period);
         broker.submitCloudletList(cloudletList);
 
+        final double[] cpuSum = {0.0};
+        final double[] ramSum = {0.0};
+        final int[] samples = {0};
+        simulation.addOnClockTickListener(e -> {
+            cpuSum[0] += Metrics.computeAvgCpuUtilization(infra.getAllHosts());
+            ramSum[0] += Metrics.computeAvgRamUtilization(infra.getAllHosts());
+            samples[0]++;
+        });
+
         simulation.start();
 
         List<Cloudlet> finishedCloudlets = broker.getCloudletFinishedList();
         int initialVmCount = vmTemplateList.size();
-        int finalVmCount = broker.getVmCreatedList().size();
+        int finalVmCount = initialVmCount + Autoscaling.getScaledCount();
 
         double makespan = Metrics.computeMakespan(finishedCloudlets);
         double avgResponseTime = Metrics.computeAvgResponseTime(finishedCloudlets);
-        double avgCpu = Metrics.computeAvgCpuUtilization(infra.getAllHosts());
-        double avgRam = Metrics.computeAvgRamUtilization(infra.getAllHosts());
+        double avgCpu = samples[0] > 0 ? cpuSum[0] / samples[0] : 0.0;
+        double avgRam = samples[0] > 0 ? ramSum[0] / samples[0] : 0.0;
         double cost = Metrics.computeEstimatedCost(finalVmCount, makespan);
 
         return new SimulationResult(

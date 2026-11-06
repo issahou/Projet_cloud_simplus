@@ -1,7 +1,5 @@
 Scenario,Periode,Cloudlets,Ordonnancement,Allocation,Autoscaling,Makespan_s,TempsReponseMoyen_s,CPU_Util_%,RAM_Util_%,VMs_Initiales,VMs_Finales,Cout_USD
-S1 - NORMALE / CloudletSchedulerTimeShared + VmAllocationPolicySimple,NORMALE,15000,CloudletSchedulerTimeShared,VmAllocationPolicySimple,false,375,31,375,31,0,00,0,00,60,25,0,1303
-S2 - NORMALE / CloudletSchedulerSpaceShared + VmAllocationPolicyBestFit,NORMALE,15000,CloudletSchedulerSpaceShared,VmAllocationPolicyBestFit,false,406,33,204,17,0,00,0,00,60,25,0,1411
-S3 - INSCRIPTIONS / CloudletSchedulerTimeShared + VmAllocationPolicySimple,INSCRIPTIONS,40000,CloudletSchedulerTimeShared,VmAllocationPolicySimple,true,1750,45,1562,91,0,00,0,00,60,25,0,6078
-S4 - INSCRIPTIONS / CloudletSchedulerSpaceShared + VmAllocationPolicyBestFit,INSCRIPTIONS,40000,CloudletSchedulerSpaceShared,VmAllocationPolicyBestFit,true,1823,22,978,04,0,00,0,00,60,25,0,6331
-S5 - EXAMENS / CloudletSchedulerTimeShared + VmAllocationPolicySimple,EXAMENS,5000,CloudletSchedulerTimeShared,VmAllocationPolicySimple,true,325,31,285,29,0,00,0,00,60,25,0,1130
-S6 - EXAMENS / CloudletSchedulerSpaceShared + VmAllocationPolicyBestFit,EXAMENS,5000,CloudletSchedulerSpaceShared,VmAllocationPolicyBestFit,true,335,61,191,13,0,00,0,00,60,25,0,1165
+S1 - NORMALE / CloudletSchedulerTimeShared + VmAllocationPolicySimple,NORMALE,15000,CloudletSchedulerTimeShared,VmAllocationPolicySimple,false,375,31,375,31,0,14,78,13,60,60,0,3128
+S2 - NORMALE / CloudletSchedulerSpaceShared + VmAllocationPolicyBestFit,NORMALE,15000,CloudletSchedulerSpaceShared,VmAllocationPolicyBestFit,false,406,33,204,17,0,15,78,13,60,60,0,3386
+S3 - INSCRIPTIONS / CloudletSchedulerTimeShared + VmAllocationPolicySimple,INSCRIPTIONS,40000,CloudletSchedulerTimeShared,VmAllocationPolicySimple,true,1750,45,1562,91,0,17,78,13,60,60,1,4587
+S4 - INSCRIPTIONS / CloudletSchedulerSpaceShared + VmAllocationPolicyBestFit,INSCRIPTIONS,40000,CloudletSchedulerSpaceShared,VmAllocationPolicyBestFit,true,1823,22,978,04,0,15,78,13,60,60,1,5194

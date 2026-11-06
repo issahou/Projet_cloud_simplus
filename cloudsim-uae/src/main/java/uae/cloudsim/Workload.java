@@ -1,11 +1,11 @@
 package uae.cloudsim;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.cloudbus.cloudsim.cloudlets.Cloudlet;
 import org.cloudbus.cloudsim.cloudlets.CloudletSimple;
 import org.cloudbus.cloudsim.utilizationmodels.UtilizationModelFull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Modélisation des charges de travail (Cloudlets) pour l'UAE.
@@ -36,10 +36,10 @@ public class Workload {
     public static final int INSCRIPTION_TOTAL = 40_000;
 
     // --- Période Examens : 50 000 cloudlets (specification) ---
-    public static final int EXAM_PASSAGE = 30_000;
-    public static final int EXAM_SAUVEGARDE = 10_000;
-    public static final int EXAM_CONSULTATION_SUJET = 10_000;
-    public static final int EXAM_TOTAL = 50_000;
+    public static final int EXAM_PASSAGE = 3_000;
+    public static final int EXAM_SAUVEGARDE = 1_000;
+    public static final int EXAM_CONSULTATION_SUJET = 1_000;
+    public static final int EXAM_TOTAL =5_000;
 
     /**
      * Crée tous les cloudlets pour une période donnée.
