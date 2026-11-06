@@ -36,10 +36,10 @@ public class Workload {
     public static final int INSCRIPTION_TOTAL = 40_000;
 
     // --- Période Examens : 50 000 cloudlets (specification) ---
-    public static final int EXAM_PASSAGE = 3_000;
-    public static final int EXAM_SAUVEGARDE = 1_000;
-    public static final int EXAM_CONSULTATION_SUJET = 1_000;
-    public static final int EXAM_TOTAL =5_000;
+    public static final int EXAM_PASSAGE = 300;
+    public static final int EXAM_SAUVEGARDE = 100;
+    public static final int EXAM_CONSULTATION_SUJET = 100;
+    public static final int EXAM_TOTAL =500;
 
     /**
      * Crée tous les cloudlets pour une période donnée.
