@@ -39,6 +39,15 @@ def add_page_number_footer(doc):
     run._r.append(fldChar2)
 
 
+def add_capture_placeholder(doc, caption):
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    run = p.add_run(f"[Capture d'ecran : {caption}]")
+    run.italic = True
+    run.font.color.rgb = RGBColor(0x80, 0x80, 0x80)
+    run.font.size = Pt(10)
+
+
 def create_report():
     doc = Document()
 
@@ -351,15 +360,9 @@ def create_report():
         row[2].text = v2
 
     doc.add_paragraph(
-        "Note : Pour des raisons de temps de calcul, la periode d'examens a été simulée "
+        "Note : Pour des raisons de temps de calcul, la periode d'examens a Ã©tÃ© simulÃ©e "
         "avec un nombre reduit de cloudlets (5 000 au lieu de 50 000) tout en conservant "
-        "les mêmes proportions et longueurs MI. Les tendances observees restent valides."
-    )
-
-    doc.add_paragraph(
-        "Note : Pour des raisons de temps de calcul, la periode d'examens a été simulée "
-        "avec un nombre reduit de cloudlets (5 000 au lieu de 50 000) tout en conservant "
-        "les mêmes proportions et longueurs MI. Les tendances observees restent valides."
+        "les mÃªmes proportions et longueurs MI. Les tendances observees restent valides."
     )
 
     doc.add_page_break()
@@ -432,4 +435,92 @@ def create_report():
     add_capture_placeholder(doc, "Console d'exécution Java (Maven) montrant le déroulement des 6 scénarios")
 
     doc.add_page_break()
+
+    # ============================================================
+    # PARTIE 5 : ANALYSE DES RESULTATS
+    # ============================================================
+    doc.add_heading("5. Analyse des résultats et conclusion", level=1)
+
+    doc.add_heading("5.1 Tableau des résultats", level=2)
+    table = doc.add_table(rows=1, cols=7)
+    table.style = 'Light Grid Accent 1'
+    hdr = table.rows[0].cells
+    for i, htxt in enumerate(["Scénario", "Période", "Cloudlets", "Politiques", "Makespan (s)", "Temps réponse moy. (s)", "VMs init→final"]):
+        hdr[i].text = htxt
+    results = [
+        ("S1", "Normale", "15 000", "TimeShared + Simple", "375,31", "31,38", "60 → 25"),
+        ("S2", "Normale", "15 000", "SpaceShared + BestFit", "406,33", "204,17", "60 → 25"),
+        ("S3", "Inscriptions", "40 000", "TimeShared + Simple", "1750,45", "1562,91", "60 → 25"),
+        ("S4", "Inscriptions", "40 000", "SpaceShared + BestFit", "1823,22", "978,04", "60 → 25"),
+        ("S5", "Examens", "5 000 (50 000 réels)", "TimeShared + Simple", "325,31", "285,29", "60 → 25"),
+        ("S6", "Examens", "5 000 (50 000 réels)", "SpaceShared + BestFit", "335,61", "191,13", "60 → 25"),
+    ]
+    for r in results:
+        row = table.add_row().cells
+        for i, v in enumerate(r):
+            row[i].text = v
+
+    doc.add_heading("5.2 Analyse comparative", level=2)
+    analysis = [
+        "En période normale, TimeShared + Simple donne le meilleur makespan (375,31 s vs 406,33 s) et le meilleur temps de réponse moyen (31,38 s vs 204,17 s).",
+        "En période d'inscriptions, TimeShared + Simple reste devant sur le makespan (1750,45 s vs 1823,22 s), mais SpaceShared + BestFit réduit fortement le temps de réponse moyen (978,04 s vs 1562,91 s).",
+        "En période d'examens, SpaceShared + BestFit donne le meilleur temps de réponse moyen (191,13 s vs 285,29 s) pour un makespan proche (335,61 s vs 325,31 s).",
+        "L'autoscaling horizontal est activé en pointe et contribue à absorber la charge, au prix d'un coût plus élevé (≈ 6 000 USD vs ≈ 1 300 USD en normale).",
+        "La charge d'examens a été simulée sur 5 000 cloudlets (au lieu de 50 000) pour des raisons de temps de calcul ; les tendances restent valides.",
+    ]
+    for a in analysis:
+        doc.add_paragraph(a, style='List Bullet')
+
+    doc.add_heading("5.3 Conclusion", level=2)
+    doc.add_paragraph(
+        "L'architecture hybride proposée (2 datacenters, 25 hôtes, 60 VM initiales avec "
+        "autoscaling horizontal) suffit en période normale et reste acceptable en période de "
+        "pointe grâce à l'autoscaling, au prix d'un coût et d'un temps de réponse accrus. "
+        "La politique SpaceShared + BestFit est recommandée pour minimiser le temps de réponse "
+        "en pointe, tandis que TimeShared + Simple maximise le débit en charge normale."
+    )
+
     doc.add_page_break()
+
+    # ============================================================
+    # PARTIE 6 : ANNEXES
+    # ============================================================
+    doc.add_heading("6. Annexes", level=1)
+
+    doc.add_heading("6.1 Environnement de simulation", level=2)
+    env_items = [
+        ("Outil", "CloudSim Plus 6.1.3"),
+        ("Langage", "Java 21"),
+        ("Build", "Maven 3.9.14"),
+        ("Point d'entrée", "uae.cloudsim.UaeCloudSim"),
+        ("Résultats", "cloudsim-uae/simulation_results.csv"),
+    ]
+    for k, v in env_items:
+        p = doc.add_paragraph()
+        p.add_run(f"{k} : ").bold = True
+        p.add_run(v)
+
+    doc.add_heading("6.2 Code source", level=2)
+    doc.add_paragraph(
+        "Le code Java de la simulation se trouve dans cloudsim-uae/src/main/java/uae/cloudsim/ "
+        "(UaeCloudSim, Infrastructure, Workload, Policies, Autoscaling, Metrics, SimulationResult)."
+    )
+
+    doc.add_heading("6.3 Emplacements des captures à insérer", level=2)
+    captures = [
+        "Carte des 6 villes de l'UAE avec emplacement des datacenters",
+        "Schéma d'architecture Cloud UAE (Internet -> Load Balancer -> 2 Datacenters -> VMs -> Services)",
+        "Console d'exécution Java (Maven) montrant le déroulement des 6 scénarios",
+    ]
+    for c in captures:
+        doc.add_paragraph(c, style='List Bullet')
+
+    doc.add_page_break()
+    doc.add_page_break()
+    return doc
+
+
+if __name__ == "__main__":
+    d = create_report()
+    d.save("rapport_uae.docx")
+    print("Rapport termine")
