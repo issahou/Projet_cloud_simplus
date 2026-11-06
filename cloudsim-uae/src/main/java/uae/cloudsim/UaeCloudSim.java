@@ -71,7 +71,7 @@ public class UaeCloudSim {
         List<Vm> vmTemplateList = infra.getVmList();
 
         if (autoscaling) {
-            setupAutoscaling(infra);
+            setupAutoscaling(infra, policy);
         }
 
         DatacenterBrokerSimple broker = new DatacenterBrokerSimple(simulation);
@@ -110,14 +110,18 @@ public class UaeCloudSim {
         return pIdx * 2 + polIdx + 1;
     }
 
-    private static void setupAutoscaling(Infrastructure infra) {
+    private static void setupAutoscaling(Infrastructure infra, Policies policy) {
         Supplier<Vm> vmSupplier = () -> {
+            org.cloudbus.cloudsim.schedulers.cloudlet.CloudletScheduler scheduler =
+                    (policy == Policies.SPACESHARED_BESTFIT)
+                            ? new org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerSpaceShared()
+                            : new org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerTimeShared();
             Vm vm = new org.cloudbus.cloudsim.vms.VmSimple(
                     0, Infrastructure.VM_MIPS_PER_PE * Infrastructure.VM_PES, Infrastructure.VM_PES)
                     .setRam(Infrastructure.VM_RAM_MB)
                     .setSize(Infrastructure.VM_STORAGE_MB)
                     .setBw(Infrastructure.VM_BW_MBPS)
-                    .setCloudletScheduler(new org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerTimeShared());
+                    .setCloudletScheduler(scheduler);
             return vm;
         };
         Autoscaling.enableHorizontalScaling(infra.getVmList(), vmSupplier);

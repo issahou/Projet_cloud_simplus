@@ -360,9 +360,9 @@ def create_report():
         row[2].text = v2
 
     doc.add_paragraph(
-        "Note : Pour des raisons de temps de calcul, la periode d'examens a Ã©tÃ© simulÃ©e "
+        "Note : Pour des raisons de temps de calcul, la periode d'examens a été simulée "
         "avec un nombre reduit de cloudlets (5 000 au lieu de 50 000) tout en conservant "
-        "les mÃªmes proportions et longueurs MI. Les tendances observees restent valides."
+        "les mêmes proportions et longueurs MI. Les tendances observees restent valides."
     )
 
     doc.add_page_break()

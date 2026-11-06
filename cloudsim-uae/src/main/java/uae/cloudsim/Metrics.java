@@ -49,7 +49,7 @@ public class Metrics {
     public static double computeAvgRamUtilization(List<Host> hosts) {
         if (hosts.isEmpty()) return 0.0;
         return hosts.stream()
-                .mapToDouble(Host::getRamUtilization)
+                .mapToDouble(h -> h.getRamUtilization() * 100.0 / h.getRam().getCapacity())
                 .average()
                 .orElse(0.0);
     }
