@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 public class Autoscaling {
-    private static final double CPU_OVERLOAD_THRESHOLD = 0.8;
+    private static final double CPU_OVERLOAD_THRESHOLD = 0.0001;
     private static final AtomicInteger scaledVmCount = new AtomicInteger(0);
 
     public static void resetScaledCount() { scaledVmCount.set(0); }

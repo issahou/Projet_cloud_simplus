@@ -70,6 +70,24 @@ public class UaeCloudSim {
         Infrastructure infra = new Infrastructure(simulation, policy);
         List<Vm> vmTemplateList = infra.getVmList();
 
+        if (autoscaling) {
+            int extra = 15;
+            int startId = vmTemplateList.size();
+            for (int i = 0; i < extra; i++) {
+                org.cloudbus.cloudsim.vms.VmSimple vm = new org.cloudbus.cloudsim.vms.VmSimple(
+                        startId + i, Infrastructure.VM_MIPS_PER_PE * Infrastructure.VM_PES, Infrastructure.VM_PES);
+                vm.setRam(Infrastructure.VM_RAM_MB);
+                vm.setSize(Infrastructure.VM_STORAGE_MB);
+                vm.setBw(Infrastructure.VM_BW_MBPS);
+                org.cloudbus.cloudsim.schedulers.cloudlet.CloudletScheduler scheduler =
+                        (policy == Policies.SPACESHARED_BESTFIT)
+                                ? new org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerSpaceShared()
+                                : new org.cloudbus.cloudsim.schedulers.cloudlet.CloudletSchedulerTimeShared();
+                vm.setCloudletScheduler(scheduler);
+                vmTemplateList.add(vm);
+            }
+        }
+
         Autoscaling.resetScaledCount();
         if (autoscaling) {
             setupAutoscaling(infra, policy);
