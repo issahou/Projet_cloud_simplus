@@ -1,0 +1,8 @@
+uae\cloudsim\Infrastructure.class
+uae\cloudsim\Autoscaling.class
+uae\cloudsim\Metrics.class
+uae\cloudsim\UaeCloudSim.class
+uae\cloudsim\SimulationResult.class
+uae\cloudsim\Workload.class
+uae\cloudsim\Policies.class
+uae\cloudsim\Infrastructure$1.class
